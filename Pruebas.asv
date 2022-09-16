@@ -1,0 +1,17 @@
+muestra = importdata("UAH_BCI_database_description\A01_1.mat");
+
+net = alexnet;
+layersTransfer = net.Layers(1:end-3);
+
+numClases = zeros(muestra.clase);
+
+for i = 1:length(muestra.clase)
+    if(not(ismember(muestra.clase(i)))
+end
+
+
+layers = [
+    layersTransfer
+    fullyConnectedLayer(numClasses,'WeightLearnRateFactor',20,'BiasLearnRateFactor',20)
+    softmaxLayer
+    classificationLayer];
