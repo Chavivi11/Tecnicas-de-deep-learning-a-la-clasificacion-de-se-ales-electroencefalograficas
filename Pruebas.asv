@@ -1,15 +1,6 @@
 clc; close all; clear
 
-matfiles = dir('UAH_BCI_database_description\*.mat') ; 
-N = length(matfiles) ; 
-iwant = cell(N,1) ;  % to save output 
-for i = 1:N
-    load(matfiles(i).name)
-    % do what you want, let out put be out
-    iwant{i} = out
-end
-
-% muestra = importdata("UAH_BCI_database_description\A01_1.mat");
+muestra = importdata("UAH_BCI_database_description\A01_1.mat");
 
 numClases = [];
 trainingData = [];
@@ -30,8 +21,8 @@ end
 
 
 numDiffClasses = numel(numClases);
-
-net = alexnet;
+% 
+% net = alexnet;
 
 layers = [
     featureInputLayer(40,"Name","featureinput")
@@ -69,4 +60,4 @@ options = trainingOptions('sgdm', ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-netTransfer = trainNetwork(trainingData,layers,options);
+netTransfer = trainNetwork(trainingData,muestras,layers,options);

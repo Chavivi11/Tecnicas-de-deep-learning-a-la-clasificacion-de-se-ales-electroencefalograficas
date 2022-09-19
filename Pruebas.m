@@ -22,32 +22,34 @@ end
 
 numDiffClasses = numel(numClases);
 
+
+
 net = alexnet;
 
 layers = [
-    featureInputLayer(40,"Name","featureinput")
-    convolution1dLayer(3,32,"Name","conv1d_5","Padding","same")
+    sequenceInputLayer(1,"Name","sequence")
+    convolution1dLayer(3,32,"Name","conv1d","Padding","same")
     reluLayer("Name","relu1")
-    crossChannelNormalizationLayer(5,"Name","norm1","K",1)
-    maxPooling1dLayer(5,"Name","maxpool1d_3","Padding","same")
+    layerNormalizationLayer("Name","layernorm")
+    maxPooling1dLayer(1,"Name","maxpool1d","Padding","same")
     convolution1dLayer(3,32,"Name","conv1d_1","Padding","same")
     reluLayer("Name","relu2")
-    crossChannelNormalizationLayer(5,"Name","norm2","K",1)
-    maxPooling1dLayer(5,"Name","maxpool1d_1","Padding","same")
+    layerNormalizationLayer("Name","layernorm_2")
+    maxPooling1dLayer(5,"Name","maxpool1d_2","Padding","same")
     convolution1dLayer(3,32,"Name","conv1d_2","Padding","same")
     reluLayer("Name","relu3")
     convolution1dLayer(3,32,"Name","conv1d_3","Padding","same")
     reluLayer("Name","relu4")
     convolution1dLayer(3,32,"Name","conv1d_4","Padding","same")
     reluLayer("Name","relu5")
-    maxPooling1dLayer(5,"Name","maxpool1d_2","Padding","same")
+    maxPooling1dLayer(5,"Name","maxpool1d_3","Padding","same")
     fullyConnectedLayer(4096,"Name","fc6","BiasLearnRateFactor",2)
     reluLayer("Name","relu6")
     dropoutLayer(0.5,"Name","drop6")
     fullyConnectedLayer(4096,"Name","fc7","BiasLearnRateFactor",2)
     reluLayer("Name","relu7")
     dropoutLayer(0.5,"Name","drop7")
-    fullyConnectedLayer(1000,"Name","fc8","BiasLearnRateFactor",2)
+    fullyConnectedLayer(2,"Name","fc8","BiasLearnRateFactor",2)
     softmaxLayer("Name","prob")
     classificationLayer("Name","output")];
 
@@ -60,4 +62,4 @@ options = trainingOptions('sgdm', ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-netTransfer = trainNetwork(trainingData,layers,options);
+netTransfer = trainNetwork(muestra.muestra,categorical(muestra.clase),layers,options);
