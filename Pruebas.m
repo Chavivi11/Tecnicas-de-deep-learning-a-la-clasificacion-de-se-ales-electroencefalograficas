@@ -2,29 +2,56 @@ clc; close all; clear
 
 muestra = importdata("UAH_BCI_database_description\A01_1.mat");
 
-numClases = [];
-trainingData = [];
+data = muestra.canal([1,3],:); % Del fichero anterior únicamente nos quedamos con los valores que proporciona C3 y C4 que están en las filas 1 y 3
 
-for i = 1:length(muestra.clase)
-    if(not(ismember(muestra.clase(i),numClases)))
-        numClases = [numClases muestra.clase(i)];
+
+columnas = 60;
+filas = 641;
+trainingData = zeros(filas,columnas);
+contadorMuestra = 1;
+datosValidos = 511 + muestra.muestra(contadorMuestra); % Inicializamos esta variable a 512 porque es a partir de este indice donde los datos son válidos
+
+% Creamos uma matriz de 641x60, que se rellena con los 641 datos que aporta
+% cada experimento.
+
+for i=1:columnas    
+    for j=1:filas
+        trainingData(j,i) = data(datosValidos);
+        datosValidos = datosValidos + 1;
+    end
+    contadorMuestra = contadorMuestra + 1;
+end
+
+% A partir de la matriz anterior realizamos la transformada de Fourier
+
+datosTransformados = real(fft(trainingData));
+
+% Creamos un vector que transforme los datos de la clase por Strings para
+% que sea más comprensible que significa cada dato
+
+classNames = [];
+
+for k=1:length(muestra.clase)
+    if(muestra.clase(k) == 1)
+        classNames = [classNames "Mano_Derecha"];
+    else
+        classNames = [classNames "Mano_Izquierda"];
     end
 end
 
-Freq = (real(fft(muestra.canal) / 1e-3));
+% Habría que filtrar y quedarnos unicamente con las frecuencias entre 12 y
+% 33 Hz y posteriormente crear la matriz con todos los datos y el
+% significado de esos datos (mano derecha o mano izquierda)
 
-for j = 1:length(Freq)
-    if(Freq(j)>12 & Freq(j)<33)
-        trainingData = [trainingData Freq(j)];
-    end
-end
+tablaDatosEntrenamiento = [datosTransformados ; classNames];
+        
 
+% for j = 1:length(Freq)
+%     if(Freq(j)>12 & Freq(j)<33)
+%         trainingData = [trainingData Freq(j)];
+%     end
+% end
 
-numDiffClasses = numel(numClases);
-
-
-
-net = alexnet;
 
 layers = [
     sequenceInputLayer(1,"Name","sequence")
@@ -55,11 +82,26 @@ layers = [
 
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',10, ...
-    'MaxEpochs',6, ...
+    'MaxEpochs',10, ...
     'InitialLearnRate',1e-4, ...
     'Shuffle','every-epoch', ...
     'ValidationFrequency',3, ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-netTransfer = trainNetwork(muestra.muestra,categorical(muestra.clase),layers,options);
+% Hay que entrenar con una parte de los datos, ese es el primer parámetro
+% El segundo parámetro serían las clases a las que pertenecen esos datos.
+% Hacer el categorical de las clases
+% El tercero sería las capas y el cuarto, las opciones
+
+% netTransfer = trainNetwork(muestra.muestra,categorical(muestra.clase),layers,options);
+
+% Para clasificarlo, sería la red neuronal el primer parámetro y el segundo
+% serian todos los datos
+
+% class = classify(netTransfer, muestra.clase);
+% 
+% figure
+% % muestra.clase primer parámetro
+% % segundo parámetro es la clase
+% confusionchart(classNames,class)
