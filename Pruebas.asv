@@ -29,7 +29,7 @@ datosTransformados = real(fft(trainingData));
 % Creamos un vector que transforme los datos de la clase por Strings para
 % que sea más comprensible que significa cada dato
 
-classNames = [];
+classNames = zeros(length(muestra.clase));
 
 for k=1:length(muestra.clase)
     if(muestra.clase(k) == 1)
@@ -43,14 +43,21 @@ end
 % 33 Hz y posteriormente crear la matriz con todos los datos y el
 % significado de esos datos (mano derecha o mano izquierda)
 
-tablaDatosEntrenamiento = [datosTransformados ; classNames];
-        
+[numRows, numCols] = size(datosTransformados);
 
-% for j = 1:length(Freq)
-%     if(Freq(j)>12 & Freq(j)<33)
-%         trainingData = [trainingData Freq(j)];
-%     end
-% end
+datosFiltrados = zeros(numRows,numCols);
+
+for l=1:numCols
+    for m=1:numRows
+    if(datosTransformados(m,l) > 12 && datosTransformados(m,l) < 33)
+        datosFiltrados(m,l) = datosTransformados(m,l);
+    end
+    end
+end
+
+
+
+tablaDatosEntrenamiento = [datosTransformados ; classNames];
 
 
 layers = [
@@ -94,12 +101,15 @@ options = trainingOptions('sgdm', ...
 % Hacer el categorical de las clases
 % El tercero sería las capas y el cuarto, las opciones
 
-% netTransfer = trainNetwork(muestra.muestra,categorical(muestra.clase),layers,options);
+% (De que fila : hasta que fila, de que columna : hasta que columna) luego
+% si se añaden los corchetes indicas qué columnas quieres. ej: tablaDatosEntrenamiento(1:end-1,[1,3,4,9,10,22,30])
+
+% netTransfer = trainNetwork(tablaDatosEntrenamiento(1:end-1,1:40),categorical(tablaDatosEntrenamiento(end,:)),layers,options);
 
 % Para clasificarlo, sería la red neuronal el primer parámetro y el segundo
 % serian todos los datos
 
-% class = classify(netTransfer, muestra.clase);
+% class = classify(netTransfer, tablaDatosEntrenamiento(1:end-1,:));
 % 
 % figure
 % % muestra.clase primer parámetro
