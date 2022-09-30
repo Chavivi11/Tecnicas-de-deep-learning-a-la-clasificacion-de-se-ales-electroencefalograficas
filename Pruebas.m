@@ -5,11 +5,11 @@ muestra = importdata("UAH_BCI_database_description\A01_1.mat");
 data = muestra.canal([1,3],:); % Del fichero anterior únicamente nos quedamos con los valores que proporciona C3 y C4 que están en las filas 1 y 3
 
 
-columnas = 60;
-filas = 641;
-trainingData = zeros(filas,columnas);
 contadorMuestra = 1;
-datosValidos = 511 + muestra.muestra(contadorMuestra); % Inicializamos esta variable a 512 porque es a partir de este indice donde los datos son válidos
+datosValidos = 511 + muestra.muestra(contadorMuestra); % Inicializamos esta variable a 512 porque es a partir de este indice donde los datos son válidos, a partir del segundo t = 4
+columnas = 60;
+filas = 641; % Esto sale de restar 512 al segundo indice de muestra.muestra. Es decir 1153-512 = 641. Esto se cumple con los demás indisces de esa variable
+trainingData = zeros(filas,columnas);
 
 % Creamos uma matriz de 641x60, que se rellena con los 641 datos que aporta
 % cada experimento.
@@ -43,21 +43,67 @@ end
 % 33 Hz y posteriormente crear la matriz con todos los datos y el
 % significado de esos datos (mano derecha o mano izquierda)
 
-[numRows, numCols] = size(datosTransformados);
+% [numRows, numCols] = size(datosTransformados);
 
-datosFiltrados = zeros(numRows,numCols);
-
-for l=1:numCols
-    for m=1:numRows
-    if(datosTransformados(m,l) > 12 && datosTransformados(m,l) < 33)
-        datosFiltrados(m,l) = datosTransformados(m,l);
-    end
-    end
-end
-
+% datosFiltrados = zeros(numRows,numCols);
+% 
+% for l=1:numCols
+%     for m=1:numRows
+%     if(datosTransformados(m,l) > 12 && datosTransformados(m,l) < 33)
+%         datosFiltrados(m,l) = datosTransformados(m,l);
+%     end
+%     end
+% end
 
 
 tablaDatosEntrenamiento = [datosTransformados ; classNames];
+
+[numRows, numCols] = size(tablaDatosEntrenamiento);
+
+manoDerecha = zeros(numRows-1, numCols/2);
+manoIzquierda = zeros(numRows-1, numCols/2);
+
+n=1;
+r = 1;
+l = 1;
+
+while n ~= numCols
+    if(tablaDatosEntrenamiento(end,n) == "Mano_Derecha")
+        manoDerecha(:,r) = tablaDatosEntrenamiento(1:end-1,n);
+        r = r + 1;
+    else
+        manoIzquierda(:,l) = tablaDatosEntrenamiento(1:end-1,n);
+        l = l + 1;
+    end
+    n = n + 1;
+end
+
+manoDerechaClass = [];%zeros(length(classNames)/2);
+manoIzquierdaClass = [];%zeros(length(classNames)/2);
+
+for k=1:length(classNames)
+    if(classNames(k) == "Mano_Derecha")
+        manoDerechaClass = [manoDerechaClass "Mano_Derecha"];
+    else
+        manoIzquierdaClass = [manoIzquierdaClass "Mano_Izquierda"];
+    end
+end
+
+datosManoDerecha = [manoDerecha ; manoDerechaClass];
+datosManoIzquierda = [manoIzquierda ; manoIzquierdaClass];
+% q = 1;
+% mD = 1;
+% mI = 1;
+% while q ~= length(classNames)
+%     if(classNames(q) == "Mano_Derecha")
+%         manoDerechaClass(mD) = classNames(q);
+%         mD = mD+1;
+%     else
+%         manoIzquierdaClass(q) = classNames(q);
+%         mI = mI + 1;
+%     end
+% end
+
 
 
 layers = [
