@@ -1,6 +1,6 @@
 clc; close all; clear
 
-muestra = importdata("UAH_BCI_database_description\A01_1.mat");
+muestra = importdata("UAH_BCI_database_description\A01_2.mat");
 
 data = muestra.canal([1,3],:); % Del fichero anterior únicamente nos quedamos con los valores que proporciona C3 y C4 que están en las filas 1 y 3
 
@@ -26,18 +26,6 @@ end
 
 datosTransformados = real(fft(trainingData));
 
-% Creamos un vector que transforme los datos de la clase por Strings para
-% que sea más comprensible que significa cada dato
-
-classNames = [];
-
-for k=1:length(muestra.clase)
-    if(muestra.clase(k) == 1)
-        classNames = [classNames "Mano_Derecha"];
-    else
-        classNames = [classNames "Mano_Izquierda"];
-    end
-end
 
 % Habría que filtrar y quedarnos unicamente con las frecuencias entre 12 y
 % 33 Hz y posteriormente crear la matriz con todos los datos y el
@@ -56,58 +44,33 @@ end
 % end
 
 
-tablaDatosEntrenamiento = [datosTransformados ; classNames];
+tablaDatosEntrenamiento = [datosTransformados ; muestra.clase];
 
 [numRows, numCols] = size(tablaDatosEntrenamiento);
 
-manoDerecha = zeros(numRows-1, numCols/2);
-manoIzquierda = zeros(numRows-1, numCols/2);
+manoDerecha = zeros(numRows, numCols/2);
+manoIzquierda = zeros(numRows, numCols/2);
 
 n=1;
 r = 1;
 l = 1;
 
-while n ~= numCols
-    if(tablaDatosEntrenamiento(end,n) == "Mano_Derecha")
-        manoDerecha(:,r) = tablaDatosEntrenamiento(1:end-1,n);
+while n <= numCols
+    if(tablaDatosEntrenamiento(end,n) == 1)
+        manoDerecha(:,r) = tablaDatosEntrenamiento(:,n);
         r = r + 1;
     else
-        manoIzquierda(:,l) = tablaDatosEntrenamiento(1:end-1,n);
+        manoIzquierda(:,l) = tablaDatosEntrenamiento(:,n);
         l = l + 1;
     end
     n = n + 1;
 end
 
-manoDerechaClass = [];%zeros(length(classNames)/2);
-manoIzquierdaClass = [];%zeros(length(classNames)/2);
 
-for k=1:length(classNames)
-    if(classNames(k) == "Mano_Derecha")
-        manoDerechaClass = [manoDerechaClass "Mano_Derecha"];
-    else
-        manoIzquierdaClass = [manoIzquierdaClass "Mano_Izquierda"];
-    end
-end
-
-datosManoDerecha = [manoDerecha ; manoDerechaClass];
-datosManoIzquierda = [manoIzquierda ; manoIzquierdaClass];
-% q = 1;
-% mD = 1;
-% mI = 1;
-% while q ~= length(classNames)
-%     if(classNames(q) == "Mano_Derecha")
-%         manoDerechaClass(mD) = classNames(q);
-%         mD = mD+1;
-%     else
-%         manoIzquierdaClass(q) = classNames(q);
-%         mI = mI + 1;
-%     end
-% end
-
-
+datosEntrenamiento = [manoDerecha(1:end,1:5:20) manoIzquierda(1:end,1:5:20) manoDerecha(1:end,1:2:20) manoIzquierda(1:end,1:2:20) manoDerecha(1:end,1:3:20) manoIzquierda(1:end,1:3:20)];
 
 layers = [
-    sequenceInputLayer(1,"Name","sequence")
+    sequenceInputLayer(641,"Name","sequence")
     convolution1dLayer(3,32,"Name","conv1d","Padding","same")
     reluLayer("Name","relu1")
     layerNormalizationLayer("Name","layernorm")
@@ -150,14 +113,12 @@ options = trainingOptions('sgdm', ...
 % (De que fila : hasta que fila, de que columna : hasta que columna) luego
 % si se añaden los corchetes indicas qué columnas quieres. ej: tablaDatosEntrenamiento(1:end-1,[1,3,4,9,10,22,30])
 
-% netTransfer = trainNetwork(tablaDatosEntrenamiento(1:end-1,1:40),categorical(tablaDatosEntrenamiento(end,:)),layers,options);
+netTransfer = trainNetwork(datosEntrenamiento(1:end-1,:),categorical(datosEntrenamiento(end,:)),layers,options);
 
 % Para clasificarlo, sería la red neuronal el primer parámetro y el segundo
 % serian todos los datos
 
-% class = classify(netTransfer, tablaDatosEntrenamiento(1:end-1,:));
-% 
-% figure
-% % muestra.clase primer parámetro
-% % segundo parámetro es la clase
-% confusionchart(classNames,class)
+class = classify(netTransfer, manoIzquierda(1:end-1,20:30));
+
+figure
+confusionchart(categorical(manoIzquierda(end,20:30)),class)
