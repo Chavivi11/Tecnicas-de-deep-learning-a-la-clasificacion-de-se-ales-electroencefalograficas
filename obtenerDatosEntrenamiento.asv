@@ -32,22 +32,16 @@ canalesPaciente = [canalC3;canalC4;canalCz];
 transformadaFourier = abs(fft(canalesPaciente));
 valor = transpose(anotaciones.Annotations(2:2:end));
 
-[rows, cols] = size(valor);
+significado = zeros(length(valor));
 
-significado = zeros(rows, cols);
-
-for i=1:cols
+for i=1:length(valor)
     if(valor(i) == "T1")
-        significado(i) = 1;
-    else
-        significado(i) = 2;
-    end
-end
+        significado
 
 % Componemos los datos del entrenamiento de la red neuronal con los valores
 % obtenidos, filtrados y aplicando la fft de los datos del canal y el
 % significado de estos
-datosEntrenamiento = [transformadaFourier ; significado];
+datosEntrenamiento = [transformadaFourier ; valor];
 
 end
 

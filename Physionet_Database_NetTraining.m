@@ -7,27 +7,6 @@ separador = '\';
 extension = '.edf';
 
 
-% for sesionesAux=2:7
-%     if (sujetos<10)
-%         session = 'S00';
-%     elseif(9<sujetos) && (sujetos<100)
-%         session = 'S0';
-%     else
-%         session = 'S';
-%     end
-%     muestra = sesionesAux*2;
-%     
-%     if(muestra<10)
-%         record = 'R0';
-%     else
-%         record = 'R';
-%     end
-% 
-%     paciente = string(sujetos);
-%     sesion = string(muestra);
-% 
-%     filename = strcat(directorio,session,paciente,separador,session,paciente,sesion,extension);
-
 for sesion=1:12
     if(sesion<10)
         record = 'R0';
@@ -64,6 +43,49 @@ pacienteManoDerecha = [manoDerechaS3 manoDerechaS4 manoDerechaS7 manoDerechaS8 m
 pacienteManoIzquierda = [manoIzquierdaS3 manoIzquierdaS4 manoIzquierdaS7 manoIzquierdaS8 manoIzquierdaS11 manoIzquierdaS12];
 
 
+datosEntrenamiento = [pacienteManoDerecha(:,1:2:20) pacienteManoIzquierda(:,1:2:20) pacienteManoDerecha(:,1:5:20) pacienteManoIzquierda(:,1:5:20)];
 
 
+layers = [
+    sequenceInputLayer(length(datosEntrenamiento)-1,"Name","sequence")
+    convolution1dLayer(3,32,"Name","conv1d","Padding","same")
+    reluLayer("Name","relu1")
+    layerNormalizationLayer("Name","layernorm")
+    maxPooling1dLayer(1,"Name","maxpool1d","Padding","same")
+    convolution1dLayer(3,32,"Name","conv1d_1","Padding","same")
+    reluLayer("Name","relu2")
+    layerNormalizationLayer("Name","layernorm_2")
+    maxPooling1dLayer(5,"Name","maxpool1d_2","Padding","same")
+    convolution1dLayer(3,32,"Name","conv1d_2","Padding","same")
+    reluLayer("Name","relu3")
+    convolution1dLayer(3,32,"Name","conv1d_3","Padding","same")
+    reluLayer("Name","relu4")
+    convolution1dLayer(3,32,"Name","conv1d_4","Padding","same")
+    reluLayer("Name","relu5")
+    maxPooling1dLayer(5,"Name","maxpool1d_3","Padding","same")
+    fullyConnectedLayer(4096,"Name","fc6","BiasLearnRateFactor",2)
+    reluLayer("Name","relu6")
+    dropoutLayer(0.5,"Name","drop6")
+    fullyConnectedLayer(4096,"Name","fc7","BiasLearnRateFactor",2)
+    reluLayer("Name","relu7")
+    dropoutLayer(0.5,"Name","drop7")
+    fullyConnectedLayer(2,"Name","fc8","BiasLearnRateFactor",2)
+    softmaxLayer("Name","prob")
+    classificationLayer("Name","output")];
+
+options = trainingOptions('sgdm', ...
+    'MiniBatchSize',10, ...
+    'MaxEpochs',10, ...
+    'InitialLearnRate',1e-4, ...
+    'Shuffle','every-epoch', ...
+    'ValidationFrequency',3, ...
+    'Verbose',false, ...
+    'Plots','training-progress');
+
+netTransfer = trainNetwork(datosEntrenamiento(1:end-1,:),categorical(datosEntrenamiento(end,:)),layers,options);
+
+class = classify(netTransfer, pacienteManoDerecha(1:end-1, 20:end));
+
+figure
+confusionchart(categorical(pacienteManoDerecha(end,20:end)),class)
     

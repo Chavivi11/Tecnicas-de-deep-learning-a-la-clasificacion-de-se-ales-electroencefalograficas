@@ -7,7 +7,7 @@ r = 1;
 l = 1;
 
 while n <= numCols
-    if(sesion(end,n) == "T1")
+    if(sesion(end,n) == 1)
         manoDerecha(:,r) = sesion(:,n);
         r = r + 1;
     else
