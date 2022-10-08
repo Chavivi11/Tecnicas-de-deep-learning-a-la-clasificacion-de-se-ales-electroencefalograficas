@@ -6,8 +6,7 @@ directorio = 'Physionet_Database\Muestras\';
 separador = '\';
 extension = '.edf';
 
-% for sujetos=1:109
-% 
+
 % for sesionesAux=2:7
 %     if (sujetos<10)
 %         session = 'S00';
@@ -26,49 +25,40 @@ extension = '.edf';
 % 
 %     paciente = string(sujetos);
 %     sesion = string(muestra);
-
+% 
 %     filename = strcat(directorio,session,paciente,separador,session,paciente,sesion,extension);
-% for sesion=1:12
-%     if(sesion==3) || (sesion==4) || (sesion==7) || (sesion==8) || (sesion==11) || (sesion==12)
-    
 
-filename = strcat(directorio,'S00','1',separador,'S00','1','R03',extension);
-
-[data, anotaciones] = edfread(filename);
-
-[numRows, numCols] = size(data);
-
-segundosValidos = 1 + floor(seconds(anotaciones.Onset(2:2:end))); % Esto nos da las posiciones efectivas de data con datos
-contadorSegundosValidos = 1;
-n = 1;
-
-canalC3 = zeros(length(data.C3__{1,1})*4,length(segundosValidos));
-
-for n=1:length(segundosValidos)
-    for i=0:3
-        canalC3(:,n) = data.C3__{segundosValidos(contadorSegundosValidos)+i,1};
+for sesion=1:12
+    if(sesion<10)
+        record = 'R0';
+    else
+        record = 'R';
     end
-    contadorSegundosValidos = contadorSegundosValidos+1;
-end
+
+    filename = strcat(directorio,'S00','1',separador,'S00','1',record,string(sesion),extension);
+    [data, anotaciones] = edfread(filename);
     
+    switch sesion
+        case 3
+            sesion3 = obtenerDatosEntrenamiento(data, anotaciones);
+            [manoDerechaS3, manoIzquierdaS3] = obtenerMDerecha_MIzquierda(sesion3);
+        case 4
+            sesion4 = obtenerDatosEntrenamiento(data, anotaciones);
+            [manoDerechaS4, manoIzquierdaS4] = obtenerMDerecha_MIzquierda(sesion4);
+        case 7
+            sesion7 = obtenerDatosEntrenamiento(data, anotaciones);
+            [manoDerechaS7, manoIzquierdaS7] = obtenerMDerecha_MIzquierda(sesion7);
+        case 8
+            sesion8 = obtenerDatosEntrenamiento(data, anotaciones);
+            [manoDerechaS8, manoIzquierdaS8] = obtenerMDerecha_MIzquierda(sesion8);
+        case 11
+            sesion11 = obtenerDatosEntrenamiento(data, anotaciones);
+            [manoDerechaS3, manoIzquierdaS3] = obtenerMDerecha_MIzquierda(sesion3);
+        case 12
+            sesion12 = obtenerDatosEntrenamiento(data, anotaciones);
+            [manoDerechaS3, manoIzquierdaS3] = obtenerMDerecha_MIzquierda(sesion3);
+    end
+end
 
 
-
-
-canalC3 = data.C3__(5,1);
-% canalC4 = data.C4__(5:4:numRows,1);
-
-
-
-% paciente1 = zeros(length(canalC3)*length(canalC3{1}),3);
-
-
-
-
-
-
-
-
-
-
-
+    
