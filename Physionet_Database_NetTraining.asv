@@ -7,27 +7,6 @@ separador = '\';
 extension = '.edf';
 
 
-% for sesionesAux=2:7
-%     if (sujetos<10)
-%         session = 'S00';
-%     elseif(9<sujetos) && (sujetos<100)
-%         session = 'S0';
-%     else
-%         session = 'S';
-%     end
-%     muestra = sesionesAux*2;
-%     
-%     if(muestra<10)
-%         record = 'R0';
-%     else
-%         record = 'R';
-%     end
-% 
-%     paciente = string(sujetos);
-%     sesion = string(muestra);
-% 
-%     filename = strcat(directorio,session,paciente,separador,session,paciente,sesion,extension);
-
 for sesion=1:12
     if(sesion<10)
         record = 'R0';
@@ -45,18 +24,30 @@ for sesion=1:12
         case 4
             sesion4 = obtenerDatosEntrenamiento(data, anotaciones);
             [manoDerechaS4, manoIzquierdaS4] = obtenerMDerecha_MIzquierda(sesion4);
+        case 5
+            sesion5 = obtenerDatosEntrenamiento(data, anotaciones);
+        case 6
+            sesion6 = obtenerDatosEntrenamiento(data, anotaciones);
         case 7
             sesion7 = obtenerDatosEntrenamiento(data, anotaciones);
             [manoDerechaS7, manoIzquierdaS7] = obtenerMDerecha_MIzquierda(sesion7);
         case 8
             sesion8 = obtenerDatosEntrenamiento(data, anotaciones);
             [manoDerechaS8, manoIzquierdaS8] = obtenerMDerecha_MIzquierda(sesion8);
+        case 9
+            sesion9 = obtenerDatosEntrenamiento(data, anotaciones);
+        case 10
+            sesion10 = obtenerDatosEntrenamiento(data, anotaciones);
         case 11
             sesion11 = obtenerDatosEntrenamiento(data, anotaciones);
             [manoDerechaS11, manoIzquierdaS11] = obtenerMDerecha_MIzquierda(sesion11);
         case 12
             sesion12 = obtenerDatosEntrenamiento(data, anotaciones);
             [manoDerechaS12, manoIzquierdaS12] = obtenerMDerecha_MIzquierda(sesion12);
+        case 13
+            sesion13 = obtenerDatosEntrenamiento(data, anotaciones);
+        case 14
+            sesion14 = obtenerDatosEntrenamiento(data, anotaciones);
     end
 end
 
@@ -68,7 +59,7 @@ datosEntrenamiento = [pacienteManoDerecha(:,1:2:20) pacienteManoIzquierda(:,1:2:
 
 
 layers = [
-    sequenceInputLayer(length(datosEntrenamiento),"Name","sequence")
+    sequenceInputLayer(length(datosEntrenamiento)-1,"Name","sequence")
     convolution1dLayer(3,32,"Name","conv1d","Padding","same")
     reluLayer("Name","relu1")
     layerNormalizationLayer("Name","layernorm")
@@ -105,8 +96,8 @@ options = trainingOptions('sgdm', ...
 
 netTransfer = trainNetwork(datosEntrenamiento(1:end-1,:),categorical(datosEntrenamiento(end,:)),layers,options);
 
-class = classify(netTransfer, pacienteManoDerecha(1:end-1, 20:end));
+class = classify(netTransfer, pacienteManoIzquierda(1:end-1, 20:end));
 
 figure
-confusionchart(categorical(pacienteManoDerecha(end,20:end)),class)
+confusionchart(categorical(pacienteManoIzquierda(end,20:end)),class)
     

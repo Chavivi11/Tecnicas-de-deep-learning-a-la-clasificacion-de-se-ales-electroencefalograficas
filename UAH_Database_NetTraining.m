@@ -75,19 +75,19 @@ layers = [
     convolution1dLayer(3,32,"Name","conv1d_4","Padding","same")
     reluLayer("Name","relu5")
     maxPooling1dLayer(5,"Name","maxpool1d_3","Padding","same")
-    fullyConnectedLayer(4096,"Name","fc6","BiasLearnRateFactor",2)
+    fullyConnectedLayer(4000,"Name","fc6","BiasLearnRateFactor",10)
     reluLayer("Name","relu6")
-    dropoutLayer(0.5,"Name","drop6")
-    fullyConnectedLayer(4096,"Name","fc7","BiasLearnRateFactor",2)
+    dropoutLayer(0.2,"Name","drop6")
+    fullyConnectedLayer(4000,"Name","fc7","BiasLearnRateFactor",10)
     reluLayer("Name","relu7")
-    dropoutLayer(0.5,"Name","drop7")
-    fullyConnectedLayer(2,"Name","fc8","BiasLearnRateFactor",2)
+    dropoutLayer(0.2,"Name","drop7")
+    fullyConnectedLayer(2,"Name","fc8","BiasLearnRateFactor",10)
     softmaxLayer("Name","prob")
     classificationLayer("Name","output")];
 
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',10, ...
-    'MaxEpochs',10, ...
+    'MaxEpochs',12, ...
     'InitialLearnRate',1e-4, ...
     'Shuffle','every-epoch', ...
     'ValidationFrequency',3, ...
