@@ -8,10 +8,10 @@ l = 1;
 
 while n <= numCols
     if(sesion(end,n) == 1)
-        manoDerecha(:,r) = sesion(:,n);
+        manoIzquierda(:,r) = sesion(:,n);
         r = r + 1;
     else
-        manoIzquierda(:,l) = sesion(:,n);
+        manoDerecha(:,l) = sesion(:,n);
         l = l + 1;
     end
     n = n + 1;

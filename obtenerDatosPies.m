@@ -5,6 +5,8 @@ contadorSegundosValidos = 1;
 
 % Creamos las matrices que contendrán los valores del canal Cz
 
+canalC3 = zeros(length(data.C3__{1,1})*4,length(segundosValidos));
+canalC4 = zeros(length(data.C4__{1,1})*4,length(segundosValidos));
 canalCz = zeros(length(data.Cz__{1,1})*4,length(segundosValidos));
 
 [~, numCols] = size(canalCz);
@@ -16,6 +18,8 @@ while n <= numCols
     k = 1;
     for i=0:3
         for j=1:length(data.C3__{1,1})
+            canalC3(k,n) = data.C3__{segundosValidos(contadorSegundosValidos)+i,1}(j);
+            canalC4(k,n) = data.C4__{segundosValidos(contadorSegundosValidos)+i,1}(j);
             canalCz(k,n) = data.Cz__{segundosValidos(contadorSegundosValidos)+i,1}(j);
             k = k + 1;
         end
@@ -24,8 +28,8 @@ while n <= numCols
     n = n + 1;
 end
     
-
-transformadaFourier = abs(fft(canalCz));
+canalesPaciente = [canalC3;canalC4;canalCz];
+transformadaFourier = abs(fft(canalesPaciente));
 valor = transpose(anotaciones.Annotations(2:2:end));
 
 [rows, cols] = size(valor);
