@@ -10,7 +10,7 @@ columnas = 60;
 filas = 641; % Esto sale de restar 512 al segundo indice de muestra.muestra. Es decir 1153-512 = 641. Esto se cumple con los demás indisces de esa variable
 datos = zeros(filas,columnas);
 etiquetaManoDerecha = 1;
-etiquetaManoIzquierda = 2;
+etiquetaMano
 
 % Creamos uma matriz de 641x60, que se rellena con los 641 datos que aporta
 % cada experimento.
@@ -103,7 +103,10 @@ netTransfer = trainNetwork(datosEntrenamientoRed(1:end-1,:),categorical(datosEnt
 % Utilizamos los datos que no se han utilizado en el entrenamiento para ver si se clasifican
 % correctamente
 
-[tasaAciertoMD, tasaFalloMD] = clasificadorDatosManos(netTransfer, manoDerecha, etiquetaManoDerecha);
-[tasaAciertoMI, tasaFalloMI] = clasificadorDatosManos(netTransfer, manoIzquierda, etiquetaManoIzquierda);
+class = classify(netTransfer, manoIzquierda(1:end-1,20:30));
 
+figure
 
+% Finalmente mostramos en una grafica el resultado de la clasificación
+
+confusionchart(categorical(manoIzquierda(end,20:30)),class)

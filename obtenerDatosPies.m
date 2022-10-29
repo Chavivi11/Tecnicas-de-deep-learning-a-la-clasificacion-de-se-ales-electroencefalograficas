@@ -13,7 +13,7 @@ canalCz = zeros(length(data.Cz__{1,1})*4,length(segundosValidos));
 n = 1;
 
 % Rellenamos las matrices con los datos que con datos sobre la imaginación
-% del movimiento de las manos derecha e izquierda
+% del movimiento de los pies
 while n <= numCols
     k = 1;
     for i=0:3
