@@ -5,24 +5,45 @@ clc; close all; clear
 directorio = 'Physionet_Database\Muestras\';
 separador = '\';
 extension = '.edf';
-f = 1;
-datosSujetos = zeros(110,7);
 
-for sujetos=1:109
+etiquetaPies = 0;
+etiquetaManoIzquierda = 1;
+etiquetaManoDerecha = 2;
+
+f = 1;
+iter = 1;
+i = 1;
+datosSujetos = zeros(13,7);
+sujetosCandidatos = zeros(1,12);
+
+% Obtenemos 12 pacientes aleatorios y sin repetición de los 109 sujetos 
+while i~=13
+    pacienteRandom = randi([1,109], 1,1);
+    if(~ismember(pacienteRandom, sujetosCandidatos))
+        sujetosCandidatos(:,iter) = pacienteRandom;
+        iter = iter + 1;
+        i = i +1;
+    end
+end
+
+    
+
+for sujetos=1:length(sujetosCandidatos)
 
     for sesion=1:14
+        
         if(sesion<10)
             record = 'R0';
         else
             record = 'R';
         end
 
-        if(sujetos < 10)
-            paciente = strcat('00', string(sujetos));
-        elseif(9 < sujetos) && (sujetos < 100)
-            paciente = strcat('0', string(sujetos));
+        if(sujetosCandidatos(sujetos) < 10)
+            paciente = strcat('00', string(sujetosCandidatos(sujetos)));
+        elseif(9 < sujetosCandidatos(sujetos)) && (sujetosCandidatos(sujetos) < 100)
+            paciente = strcat('0', string(sujetosCandidatos(sujetos)));
         else
-            paciente = string(sujetos);
+            paciente = string(sujetosCandidatos(sujetos));
         end
 
         filename = strcat(directorio,'S',paciente,separador,'S',paciente,record,string(sesion),extension);
@@ -76,17 +97,12 @@ for sujetos=1:109
     
     datosEntrenamiento = datosEntrenamienoRed(pacienteManoDerecha, pacienteManoIzquierda, pacientePies);
     
-    etiquetaPies = 0;
-    etiquetaManoIzquierda = 1;
-    etiquetaManoDerecha = 2;
-    
-    
     layers = [
         sequenceInputLayer(length(datosEntrenamiento)-1,"Name","sequence")
         convolution1dLayer(3,32,"Name","conv1d","Padding","same")
         reluLayer("Name","relu1")
         layerNormalizationLayer("Name","layernorm")
-        maxPooling1dLayer(1,"Name","maxpool1d","Padding","same")
+        maxPooling1dLayer(5,"Name","maxpool1d","Padding","same")
         convolution1dLayer(3,32,"Name","conv1d_1","Padding","same")
         reluLayer("Name","relu2")
         layerNormalizationLayer("Name","layernorm_2")
@@ -95,13 +111,13 @@ for sujetos=1:109
         reluLayer("Name","relu3")
         convolution1dLayer(3,32,"Name","conv1d_3","Padding","same")
         reluLayer("Name","relu4")
-        convolution1dLayer(3,32,"Name","conv1d_4","Padding","same")
+        convolution1dLayer(5,32,"Name","conv1d_4","Padding","same")
         reluLayer("Name","relu5")
         maxPooling1dLayer(5,"Name","maxpool1d_3","Padding","same")
-        fullyConnectedLayer(4096,"Name","fc6","BiasLearnRateFactor",10)
+        fullyConnectedLayer(4000,"Name","fc6","BiasLearnRateFactor",10)
         reluLayer("Name","relu6")
         dropoutLayer(0.1,"Name","drop6")
-        fullyConnectedLayer(4096,"Name","fc7","BiasLearnRateFactor",10)
+        fullyConnectedLayer(4000,"Name","fc7","BiasLearnRateFactor",10)
         reluLayer("Name","relu7")
         dropoutLayer(0.1,"Name","drop7")
         fullyConnectedLayer(3,"Name","fc8","BiasLearnRateFactor",10)
@@ -110,7 +126,7 @@ for sujetos=1:109
     
     options = trainingOptions('sgdm', ...
         'MiniBatchSize',10, ...
-        'MaxEpochs',15, ...
+        'MaxEpochs',12, ...
         'InitialLearnRate',1e-4, ...
         'Shuffle','every-epoch', ...
         'ValidationFrequency',3, ...
