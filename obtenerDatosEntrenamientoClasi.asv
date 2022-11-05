@@ -1,0 +1,41 @@
+function [mDS3,mIS3,mDS4,mIS4,pS5,pS6,mDS7,mIS7  ] = obtenerDatosEntrenamientoClasi(sesion, data, anotaciones, dataClasificacion, anotacionesClasificacion)
+switch sesion
+    case 3
+        sesion3 = obtenerDatosEntrenamiento(data, anotaciones);
+        [mDS3, mIS3] = obtenerMDerecha_MIzquierda(sesion3);        
+    case 4
+        sesion4 = obtenerDatosEntrenamiento(data, anotaciones);
+        [mDS4, mIS4] = obtenerMDerecha_MIzquierda(sesion4);        
+    case 5
+        sesion5 = obtenerDatosPies(data, anotaciones);
+        pS5 = datosPies(sesion5);
+    case 6
+        sesion6 = obtenerDatosPies(data, anotaciones);
+        pS6 = datosPies(sesion6);
+    case 7
+        sesion7 = obtenerDatosEntrenamiento(data, anotaciones);
+        [mDS7, mIS7] = obtenerMDerecha_MIzquierda(sesion7);
+    case 8
+        sesion8 = obtenerDatosEntrenamiento(data, anotaciones);
+        [mDS8, mnoIzquierdaS8] = obtenerMDerecha_MIzquierda(sesion8);
+    case 9
+        sesion9 = obtenerDatosPies(data, anotaciones);
+        pies9 = datosPies(sesion9);
+    case 10
+        sesion10 = obtenerDatosPies(data, anotaciones);
+        pies10 = datosPies(sesion10);
+    case 11
+        sesion11 = obtenerDatosEntrenamiento(data, anotaciones);
+        [manoDerechaS11, manoIzquierdaS11] = obtenerMDerecha_MIzquierda(sesion11);
+    case 12
+        sesion12 = obtenerDatosEntrenamiento(data, anotaciones);
+        [manoDerechaS12, manoIzquierdaS12] = obtenerMDerecha_MIzquierda(sesion12);
+    case 13
+        sesion13 = obtenerDatosPies(data, anotaciones);
+        pies13 = datosPies(sesion13);
+    case 14
+        sesion14 = obtenerDatosPies(data, anotaciones);
+        pies14 = datosPies(sesion14);
+end
+end
+
