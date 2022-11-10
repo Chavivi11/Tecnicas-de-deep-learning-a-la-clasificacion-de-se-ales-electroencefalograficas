@@ -6,9 +6,9 @@ etiquetaPies = 0;
 etiquetaManoIzquierda = 1;
 etiquetaManoDerecha = 2;
 
-tiradas = zeros(10, 8);
+tiradas = zeros(20, 8);
 l = 1;
-for k=1:10
+for k=1:20
 
     f = 1;
     iter = 1;
@@ -110,5 +110,4 @@ for k=1:10
     tiradas(l,:) = [l datosSujetos(end,:)];
     l = l+1;
 end
-
     
