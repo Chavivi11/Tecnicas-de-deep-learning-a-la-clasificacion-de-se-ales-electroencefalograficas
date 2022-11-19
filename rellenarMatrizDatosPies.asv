@@ -20,7 +20,7 @@ canalCzFiltro = bandpass(canalCz,[0.5,30],160);
 
 for i=1:numCols
     [cCz, lCz] = wavedec(canalCzFiltro(:,i),1,'db2');
-    czBand = appcoef(cCz, lCz,'db2');
+    czBand = appcoef(cCz, lCz,'db');
     cz(:,i) = czBand;
 end
 

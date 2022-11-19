@@ -29,14 +29,14 @@ for k=1:1
         end
     end
 
-%     while j~=13
-%         pacienteClasificacionRandom = randi([1,109], 1,1);
-%         if((~ismember(pacienteClasificacionRandom, sujetosCandidatos)) && (~ismember(pacienteClasificacionRandom, sujetosCandidatosClasificacion)))
-%             sujetosCandidatosClasificacion(:,c) = pacienteClasificacionRandom;
-%             c = c + 1;
-%             j = j +1;
-%         end
-%     end
+    while j~=13
+        pacienteClasificacionRandom = randi([1,109], 1,1);
+        if((~ismember(pacienteClasificacionRandom, sujetosCandidatos)) && (~ismember(pacienteClasificacionRandom, sujetosCandidatosClasificacion)))
+            sujetosCandidatosClasificacion(:,c) = pacienteClasificacionRandom;
+            c = c + 1;
+            j = j +1;
+        end
+    end
 
 
 
@@ -45,24 +45,28 @@ for k=1:1
 
 
         [mDS3,mIS3,mDS4,mIS4,pS5,pS6,mDS7,mIS7,mDS8,mIS8,pS9,pS10,mDS11,mIS11,mDS12,mIS12,pS13,pS14] = obtenerDatosSesiones(sujetosCandidatos(sujetos));
-%         [mDS3C,mIS3C,mDS4C,mIS4C,pS5C,pS6C,mDS7C,mIS7C,mDS8C,mIS8C,pS9C,pS10C,mDS11C,mIS11C,mDS12C,mIS12C,pS13C,pS14C] = obtenerDatosSesiones(sujetosCandidatosClasificacion(sujetos));
+        [mDS3C,mIS3C,mDS4C,mIS4C,pS5C,pS6C,mDS7C,mIS7C,mDS8C,mIS8C,pS9C,pS10C,mDS11C,mIS11C,mDS12C,mIS12C,pS13C,pS14C] = obtenerDatosSesiones(sujetosCandidatosClasificacion(sujetos));
 
         pacienteManoDerecha = [mDS3 mDS4 mDS7 mDS8 mDS11 mDS12];
         pacienteManoIzquierda = [mIS3 mIS4 mIS7 mIS8 mIS11 mIS12];
         pacientePies = [pS5 pS6 pS9 pS10 pS13 pS14];
 
-%         pacienteManoDerechaC = [mDS3C mDS4C mDS7C mDS8C mDS11C mDS12C];
-%         pacienteManoIzquierdaC = [mIS3C mIS4C mIS7C mIS8C mIS11C mIS12C];
-%         pacientePiesC = [pS5C pS6C pS9C pS10C pS13C pS14C];
+        pacienteManoDerechaC = [mDS3C mDS4C mDS7C mDS8C mDS11C mDS12C];
+        pacienteManoIzquierdaC = [mIS3C mIS4C mIS7C mIS8C mIS11C mIS12C];
+        pacientePiesC = [pS5C pS6C pS9C pS10C pS13C pS14C];
 
 
         datosEntrenamiento = datosEntrenamienoRed(pacienteManoDerecha, pacienteManoIzquierda, pacientePies);
 
         
 
-        [tasaAcietoMD, tasaFalloMD] = clasificadorDatos(datosEntrenamiento, pacienteManoDerecha, etiquetaManoDerecha);
-        [tasaAcietoMI, tasaFalloMI] = clasificadorDatos(datosEntrenamiento, pacienteManoIzquierda, etiquetaManoIzquierda);
-        [tasaAcietoPies, tasaFalloPies] = clasificadorDatos(datosEntrenamiento, pacientePies, etiquetaPies);
+%         [tasaAcietoMD, tasaFalloMD] = clasificadorDatos(datosEntrenamiento, pacienteManoDerecha, etiquetaManoDerecha);
+%         [tasaAcietoMI, tasaFalloMI] = clasificadorDatos(datosEntrenamiento, pacienteManoIzquierda, etiquetaManoIzquierda);
+%         [tasaAcietoPies, tasaFalloPies] = clasificadorDatos(datosEntrenamiento, pacientePies, etiquetaPies);
+
+        [tasaAcietoMD, tasaFalloMD] = clasificadorDatos(datosEntrenamiento, pacienteManoDerechaC, etiquetaManoDerecha);
+        [tasaAcietoMI, tasaFalloMI] = clasificadorDatos(datosEntrenamiento, pacienteManoIzquierdaC, etiquetaManoIzquierda);
+        [tasaAcietoPies, tasaFalloPies] = clasificadorDatos(datosEntrenamiento, pacientePiesC, etiquetaPies);
 
 
         datosSujetos(f,:) = [sujetos tasaAcietoMD tasaFalloMD tasaAcietoMI tasaFalloMI tasaAcietoPies tasaFalloPies];

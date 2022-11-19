@@ -41,7 +41,9 @@ options = trainingOptions('sgdm', ...
 
 netTransfer = trainNetwork(datosEntrenamiento(1:end-1,:),categorical(datosEntrenamiento(end,:)),layers,options);
 
-class = classify(netTransfer, datosClasificar(1:end-1, 20:end));
+% class = classify(netTransfer, datosClasificar(1:end-1, 20:end));
+class = classify(netTransfer, datosClasificar(1:end-1, :));
+
 for j=1:length(class)
     if(class(j) == categorical(etiqueta))
         numAciertos = numAciertos + 1;
