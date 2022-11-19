@@ -8,7 +8,7 @@ etiquetaManoDerecha = 2;
 
 tiradas = zeros(20, 8);
 l = 1;
-for k=1:20
+for k=1:1
 
     f = 1;
     iter = 1;
@@ -58,47 +58,11 @@ for k=1:20
 
         datosEntrenamiento = datosEntrenamienoRed(pacienteManoDerecha, pacienteManoIzquierda, pacientePies);
 
-        layers = [
-            sequenceInputLayer(length(datosEntrenamiento)-1,"Name","sequence")
-            convolution1dLayer(3,32,"Name","conv1d","Padding","same")
-            reluLayer("Name","relu1")
-            layerNormalizationLayer("Name","layernorm")
-            maxPooling1dLayer(5,"Name","maxpool1d","Padding","same")
-            convolution1dLayer(3,32,"Name","conv1d_1","Padding","same")
-            reluLayer("Name","relu2")
-            layerNormalizationLayer("Name","layernorm_2")
-            maxPooling1dLayer(5,"Name","maxpool1d_2","Padding","same")
-            convolution1dLayer(3,32,"Name","conv1d_2","Padding","same")
-            reluLayer("Name","relu3")
-            convolution1dLayer(3,32,"Name","conv1d_3","Padding","same")
-            reluLayer("Name","relu4")
-            convolution1dLayer(5,32,"Name","conv1d_4","Padding","same")
-            reluLayer("Name","relu5")
-            maxPooling1dLayer(5,"Name","maxpool1d_3","Padding","same")
-            fullyConnectedLayer(4000,"Name","fc6","BiasLearnRateFactor",15)
-            reluLayer("Name","relu6")
-            dropoutLayer(0.2,"Name","drop6")
-            fullyConnectedLayer(4000,"Name","fc7","BiasLearnRateFactor",15)
-            reluLayer("Name","relu7")
-            dropoutLayer(0.2,"Name","drop7")
-            fullyConnectedLayer(3,"Name","fc8","BiasLearnRateFactor",15)
-            softmaxLayer("Name","prob")
-            classificationLayer("Name","output")];
+        
 
-        options = trainingOptions('sgdm', ...
-            'MiniBatchSize',10, ...
-            'MaxEpochs',15, ...
-            'InitialLearnRate',1e-4, ...
-            'Shuffle','every-epoch', ...
-            'ValidationFrequency',3, ...
-            'Verbose',false, ...
-            'Plots','none');
-
-        netTransfer = trainNetwork(datosEntrenamiento(1:end-1,:),categorical(datosEntrenamiento(end,:)),layers,options);
-
-        [tasaAcietoMD, tasaFalloMD] = clasificadorDatos(netTransfer, pacienteManoDerecha, etiquetaManoDerecha);
-        [tasaAcietoMI, tasaFalloMI] = clasificadorDatos(netTransfer, pacienteManoIzquierda, etiquetaManoIzquierda);
-        [tasaAcietoPies, tasaFalloPies] = clasificadorDatos(netTransfer, pacientePies, etiquetaPies);
+        [tasaAcietoMD, tasaFalloMD] = clasificadorDatos(datosEntrenamiento, pacienteManoDerecha, etiquetaManoDerecha);
+        [tasaAcietoMI, tasaFalloMI] = clasificadorDatos(datosEntrenamiento, pacienteManoIzquierda, etiquetaManoIzquierda);
+        [tasaAcietoPies, tasaFalloPies] = clasificadorDatos(datosEntrenamiento, pacientePies, etiquetaPies);
 
 
         datosSujetos(f,:) = [sujetos tasaAcietoMD tasaFalloMD tasaAcietoMI tasaFalloMI tasaAcietoPies tasaFalloPies];

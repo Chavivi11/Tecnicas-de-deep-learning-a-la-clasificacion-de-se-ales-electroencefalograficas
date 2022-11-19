@@ -28,7 +28,8 @@ for sesion=1:14
         case 13
             pS13 = rellenarMatrizDatosPies(data, anotaciones);
         case 14
-            pS14 = rellenarMatrizDatosPies(data, anotaciones);
+            sesion14 = obtenerDatosPies(data, anotaciones);
+            pS14 = datosPies(sesion14);
     end
 end
 end
