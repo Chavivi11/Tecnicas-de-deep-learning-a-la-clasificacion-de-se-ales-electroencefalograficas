@@ -29,7 +29,15 @@ while n <= numCols
 end
     
 canalesPaciente = [canalC3;canalC4;canalCz];
-transformadaFourier = abs(fft(canalesPaciente));
+canalesPacienteFiltro = bandpass(canalesPaciente,[8,30],160);
+[~,numCols] = size(canalesPacienteFiltro);
+
+for i=1:numCols
+    [cC, lC] = wavedec(canalesPacienteFiltro(:,i),1,'db2');
+    cPacientesBand = appcoef(cC, lC,'db2');
+    cPacientes(:,i) = cPacientesBand;
+end
+transformadaFourier = abs(fft(cPacientes));
 valor = transpose(anotaciones.Annotations(2:2:end));
 
 [rows, cols] = size(valor);

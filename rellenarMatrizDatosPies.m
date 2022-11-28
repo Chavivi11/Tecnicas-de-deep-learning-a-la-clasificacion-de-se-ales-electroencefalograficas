@@ -14,7 +14,7 @@ end
 % Creamos las matrices que contendrán los valores de los canales C3, C4 y
 % Cz, respectivamente
 canalCz = rellenarMatriz(data.Cz__, tarea, t2, "T2", segundosValidos);
-canalCzFiltro = bandpass(canalCz,[0.5,30],160);
+canalCzFiltro = bandpass(canalCz,[8,30],160);
 
 [~,numCols] = size(canalCzFiltro);
 

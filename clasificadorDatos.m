@@ -20,29 +20,29 @@ layers = [
     convolution1dLayer(5,32,"Name","conv1d_4","Padding","same")
     reluLayer("Name","relu5")
     maxPooling1dLayer(5,"Name","maxpool1d_3","Padding","same")
-    fullyConnectedLayer(4000,"Name","fc6","BiasLearnRateFactor",15)
+    fullyConnectedLayer(4000,"Name","fc6","BiasLearnRateFactor",20)
     reluLayer("Name","relu6")
-    dropoutLayer(0.6,"Name","drop6")
-    fullyConnectedLayer(4000,"Name","fc7","BiasLearnRateFactor",15)
+    dropoutLayer(0.65,"Name","drop6")
+    fullyConnectedLayer(4000,"Name","fc7","BiasLearnRateFactor",20)
     reluLayer("Name","relu7")
-    dropoutLayer(0.15,"Name","drop7")
-    fullyConnectedLayer(3,"Name","fc8","BiasLearnRateFactor",15)
+    dropoutLayer(0.3,"Name","drop7")
+    fullyConnectedLayer(3,"Name","fc8","BiasLearnRateFactor",20)
     softmaxLayer("Name","prob")
     classificationLayer("Name","output")];
 
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',15, ...
-    'MaxEpochs',15, ...
+    'MaxEpochs',20, ...
     'InitialLearnRate',1e-4, ...
     'Shuffle','every-epoch', ...
-    'ValidationFrequency',3, ...
+    'ValidationFrequency',4, ...
     'Verbose',false, ...
     'Plots','none');
 
 netTransfer = trainNetwork(datosEntrenamiento(1:end-1,:),categorical(datosEntrenamiento(end,:)),layers,options);
 
-% class = classify(netTransfer, datosClasificar(1:end-1, 20:end));
-class = classify(netTransfer, datosClasificar(1:end-1, :));
+class = classify(netTransfer, datosClasificar(1:end-1, 20:end));
+% class = classify(netTransfer, datosClasificar(1:end-1, :));
 
 for j=1:length(class)
     if(class(j) == categorical(etiqueta))

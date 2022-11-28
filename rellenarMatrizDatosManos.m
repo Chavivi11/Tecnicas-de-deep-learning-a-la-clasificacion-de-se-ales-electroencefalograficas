@@ -22,7 +22,7 @@ end
 % Cz, respectivamente
 
 canalC4 = rellenarMatriz(data.C4__, tarea, t1, "T1", segundosValidos);
-canalC4Filtro = bandpass(canalC4,[0.5,30],160);
+canalC4Filtro = bandpass(canalC4,[8,30],160);
 [~,numCols] = size(canalC4Filtro);
 
 for i=1:numCols
@@ -30,12 +30,12 @@ for i=1:numCols
     c4Band = appcoef(cC4, lC4,'db2');
     c4(:,i) = c4Band;
 end
-canalC4 = real(fft(c4));
+canalC4 = abs(fft(c4));
 canalC4(end+1,:) = 1;
 manoIzquierda = canalC4;
 
 canalC3 = rellenarMatriz(data.C3__, tarea, t2, "T2", segundosValidos);
-canalC3Filtro = bandpass(canalC3,[0.5,30],160);
+canalC3Filtro = bandpass(canalC3,[8,30],160);
 [~,numCols] = size(canalC3Filtro);
 
 for i=1:numCols
@@ -43,7 +43,7 @@ for i=1:numCols
     c3Band = appcoef(cC3, lC3,'db2');
     c3(:,i) = c3Band;
 end
-canalC3 = real(fft(c3));
+canalC3 = abs(fft(c3));
 canalC3(end+1,:) = 2;
 manoDerecha = canalC3;
 
