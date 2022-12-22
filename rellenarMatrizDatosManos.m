@@ -2,9 +2,6 @@ function [manoIzquierda, manoDerecha] = rellenarMatrizDatosManos(data,anotacione
 
 segundosValidos = 1 + floor(seconds(anotaciones.Onset(2:2:end))); % Esto nos da las posiciones efectivas de data con datos
 tarea = anotaciones.Annotations(2:2:end);
-
-% contadorSegundosValidos = 1;
-% cont = 1;
 t1 = 0;
 t2 = 0;
 
@@ -15,8 +12,6 @@ for i=1:length(tarea)
         t2 = t2+1;
     end
 end
-
-
 
 % Creamos las matrices que contendrán los valores de los canales C3, C4 y
 % Cz, respectivamente
@@ -46,7 +41,6 @@ end
 canalC3 = abs(fft(c3));
 canalC3(end+1,:) = 2;
 manoDerecha = canalC3;
-
 
 end
 

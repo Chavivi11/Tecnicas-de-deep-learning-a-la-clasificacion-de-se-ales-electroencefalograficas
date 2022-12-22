@@ -1,8 +1,7 @@
 function [pies] = rellenarMatrizDatosPies(data,anotaciones)
+
 segundosValidos = 1 + floor(seconds(anotaciones.Onset(2:2:end))); % Esto nos da las posiciones efectivas de data con datos
 tarea = anotaciones.Annotations(2:2:end);
-
-
 t2 = 0;
 
 for i=1:length(tarea)

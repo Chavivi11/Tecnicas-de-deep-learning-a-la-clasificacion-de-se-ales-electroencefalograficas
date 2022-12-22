@@ -29,7 +29,7 @@ while n <= numCols
 end
     
 canalesPaciente = [canalC3;canalC4;canalCz];
-canalesPacienteFiltro = bandpass(canalesPaciente,[8,30],160);
+canalesPacienteFiltro = bandpass(canalesPaciente,[0.5,30],160);
 [~,numCols] = size(canalesPacienteFiltro);
 
 for i=1:numCols
