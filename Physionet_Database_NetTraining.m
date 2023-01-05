@@ -56,5 +56,5 @@ for k=1:20
     tiradas(l,:) = [l datosSujetos(end,:)];
     l = l+1;
     
-    writetable(table(datosSujetos), 'Tiradas\Tiradas5.xlsx', 'Sheet',k);
+    writetable(table(datosSujetos), 'Tiradas\Tiradas.xlsx', 'Sheet',k);
 end
