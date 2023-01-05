@@ -116,11 +116,11 @@ for sujetos = 1:12
     % Utilizamos los datos que no se han utilizado en el entrenamiento para ver si se clasifican
     % correctamente
 
-    [tasaAciertoMD, tasaFalloMD] = clasificadorDatos(netTransfer, manoDerecha, etiquetaManoDerecha);
-    [tasaAciertoMI, tasaFalloMI] = clasificadorDatos(netTransfer, manoIzquierda, etiquetaManoIzquierda);
+    [tasaAciertoMD, tasaFalloMD] = clasificadorDatosUAH(netTransfer, manoDerecha, etiquetaManoDerecha);
+    [tasaAciertoMI, tasaFalloMI] = clasificadorDatosUAH(netTransfer, manoIzquierda, etiquetaManoIzquierda);
 
     datosPaciente(f,:) = [sujetos tasaAciertoMD tasaFalloMD tasaAciertoMI tasaFalloMI];
     f = f + 1;
 end
 
-datosPaciente(end, :) = [max(sujetos) mean(datosPaciente(:,2)) mean(datosPaciente(:,3)) mean(datosPaciente(:,4)) mean(datosPaciente(:,5))];
+datosPaciente(end, :) = [max(sujetos) round(mean(datosPaciente(1:end-1,2)),2) round(mean(datosPaciente(1:end-1,3)),2) round(mean(datosPaciente(1:end-1,4)),2) round(mean(datosPaciente(1:end-1,5)),2)];

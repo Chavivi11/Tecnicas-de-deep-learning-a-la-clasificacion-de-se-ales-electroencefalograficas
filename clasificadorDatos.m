@@ -50,8 +50,8 @@ for j=1:length(class)
     end
 end
 
-tasaAcierto = (numAciertos/(numAciertos + numFallos)) * 100;
-tasaFallo = (numFallos/(numAciertos + numFallos)) * 100;
+tasaAcierto = round((numAciertos/(numAciertos + numFallos)) * 100, 2);
+tasaFallo = round((numFallos/(numAciertos + numFallos)) * 100, 2);
 
 end
 

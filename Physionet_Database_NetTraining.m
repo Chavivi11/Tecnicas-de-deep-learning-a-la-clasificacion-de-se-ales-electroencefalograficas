@@ -51,10 +51,10 @@ for k=1:20
         f = f + 1;
     end
 
-    datosSujetos(end, :) = [max(datosSujetos(:,1)) mean(datosSujetos(1:end-1,2)) mean(datosSujetos(1:end-1,3)) mean(datosSujetos(1:end-1,4)) mean(datosSujetos(1:end-1,5)) mean(datosSujetos(1:end-1,6)) mean(datosSujetos(1:end-1,7))];
+    datosSujetos(end, :) = [max(datosSujetos(:,1)) round(mean(datosSujetos(1:end-1,2)), 2) round(mean(datosSujetos(1:end-1,3)), 2) round(mean(datosSujetos(1:end-1,4)), 2) round(mean(datosSujetos(1:end-1,5)), 2) round(mean(datosSujetos(1:end-1,6)), 2) round(mean(datosSujetos(1:end-1,7)), 2)];
     
     tiradas(l,:) = [l datosSujetos(end,:)];
     l = l+1;
     
-    writetable(table(datosSujetos), 'Tiradas\Tiradas.xlsx', 'Sheet',k);
+    writetable(table(datosSujetos), 'Tiradas\Tiradas5.xlsx', 'Sheet',k);
 end
