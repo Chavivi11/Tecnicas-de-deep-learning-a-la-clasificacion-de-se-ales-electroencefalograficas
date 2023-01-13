@@ -1,7 +1,14 @@
 function [tasaAcierto,tasaFallo] = clasificadorDatos(datosEntrenamiento, datosClasificar, etiqueta)
 
+% Entrenamiento de la red neuronal, clasificacion de los datos según la
+% etiqueta que se le pasa por parámetro y calculo de la tasa de acierto y
+% fallo de la clsificacion de las tareas en funcion de la etiqueta.
+
 numAciertos = 0;
 numFallos = 0;
+
+% Definición de las capas de la red neuronal junto a las opciones de
+% entrenamiento.
 
 layers = [
     sequenceInputLayer(length(datosEntrenamiento)-1,"Name","sequence")
@@ -38,9 +45,15 @@ options = trainingOptions('sgdm', ...
     'Verbose',false, ...
     'Plots','none');
 
+% Entrenamiento de la red neuronal 
+
 netTransfer = trainNetwork(datosEntrenamiento(1:end-1,:),categorical(datosEntrenamiento(end,:)),layers,options);
 
+% Clasificación de los datos
+
 class = classify(netTransfer, datosClasificar(1:end-1, 20:end));
+
+% Calculo de la tasa de acierto y fallo
 
 for j=1:length(class)
     if(class(j) == categorical(etiqueta))

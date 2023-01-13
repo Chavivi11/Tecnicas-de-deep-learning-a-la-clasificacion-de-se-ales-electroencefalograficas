@@ -70,8 +70,7 @@ for k=1:20
         f = f + 1;
     end
 
-    % A la ultima fila de la matriz anterior, añadimos el número total de
-    % pacientes y la media de la tasa de acierto y fallo de las tareas. 
+    
 
     datosSujetos(end, :) = [max(datosSujetos(:,1)) round(mean(datosSujetos(1:end-1,2)), 2) round(mean(datosSujetos(1:end-1,3)), 2) round(mean(datosSujetos(1:end-1,4)), 2) round(mean(datosSujetos(1:end-1,5)), 2) round(mean(datosSujetos(1:end-1,6)), 2) round(mean(datosSujetos(1:end-1,7)), 2)];
     

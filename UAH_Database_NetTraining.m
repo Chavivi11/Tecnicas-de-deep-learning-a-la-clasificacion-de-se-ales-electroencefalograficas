@@ -1,10 +1,13 @@
 clc; close all; clear
 
+% Se definen las variables globales.
 
 etiquetaManoDerecha = 1;
 etiquetaManoIzquierda = 2;
 datosPaciente = zeros(13, 5);
 f = 1;
+
+% Extraemos del banco de datos todas las primeras sesiones de todos los usuarios.
 
 for sujetos = 1:12
     if(sujetos<10)
@@ -14,6 +17,7 @@ for sujetos = 1:12
     end
 
     fileName = strcat('UAH_BCI_database_description\A',paciente, '_1.mat');
+
     muestra = importdata(fileName);
 
     datosCanal = muestra.canal([1,3],:); % Del fichero anterior únicamente nos quedamos con los valores que proporciona C3 y C4 que están en las filas 1 y 3

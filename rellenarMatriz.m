@@ -1,5 +1,7 @@
 function [canal] = rellenarMatriz(data, tarea, t, etiqueta, segundosValidos)
 
+% Funcion para rellenar matrices con los datos de las sesiones
+
 n = 1;
 cont = 1;
 contadorSegundosValidos = 1;

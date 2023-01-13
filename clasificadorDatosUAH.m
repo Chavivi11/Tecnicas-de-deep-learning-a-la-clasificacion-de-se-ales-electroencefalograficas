@@ -1,5 +1,8 @@
 function [tasaAcierto,tasaFallo] = clasificadorDatosUAH(netTransfer, datosClasificar, etiqueta)
 
+% Función encargada de contar los aciertos y los fallos a la hora de la
+% clasificación en el fichero del banco de datos de la UAH. 
+
 numAciertos = 0;
 numFallos = 0;
 

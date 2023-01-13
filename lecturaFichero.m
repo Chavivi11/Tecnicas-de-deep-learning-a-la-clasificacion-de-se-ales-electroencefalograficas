@@ -1,5 +1,7 @@
 function [data,anotaciones] = lecturaFichero(sesion, sujetos)
 
+% Función destinada a la lectura de las sesiones de un sujeto
+
 directorio = 'Physionet_Database\Muestras\';
 separador = '\';
 extension = '.edf';
@@ -21,5 +23,6 @@ end
 filename = strcat(directorio,'S',paciente,separador,'S',paciente,record,string(sesion),extension);
 
 [data, anotaciones] = edfread(filename);
+
 end
 
